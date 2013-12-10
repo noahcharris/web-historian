@@ -9,9 +9,17 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
-exports.serveStaticAssets = function(res, folder, asset) {
-  //Write some code here that helps serve up your static files!
-  //(Static files are things like html (yours or arhived from others...), css, or anything that doesn't change often.)
+exports.serveStaticAssets = function(res, folder, asset, type) {
+  fs.readFile("./" + folder + "/" + asset, function(err, data) {
+    var status = 200;
+    if (err) {
+      status = 404;
+      console.log("Could not load asset.");
+    }
+    headers['Content-Type'] = type;
+    res.writeHead(200, headers);
+    res.end(data);
+  });
 };
 
 // As you go through, keep thinking about what helper functions you can put here!
