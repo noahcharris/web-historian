@@ -1,7 +1,41 @@
 var path = require('path');
 var fs = require('fs');
 var helpers = require('./http-helpers.js');
+var mysql = require('mysql');
 module.exports.datadir = path.join(__dirname, "../data/sites.txt");
+
+
+//#### MySQL stuff ####
+
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'secret',
+  database: 'database'
+});
+
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log('Connected to database!');
+});
+
+connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+  console.log('The solution is: ', rows[0].solution);
+});
+
+//connection.query('create table employee (first varchar(15), last varchar(20));');
+
+connection.query("insert into employee (first, last) values ('Luke', 'Duke');");
+
+connection.query('select * from employee', function(err, rows) {
+  console.log(rows[0]);
+});
+
+connection.end();
+
+//##############
+
 
 var homepage = function(req, res) {
   if (req.method === 'GET')
@@ -68,7 +102,7 @@ function updateArchives() {
   fs.readdir(__dirname + "/../data/sites", function(err, files) {
     for (var i=0;i<files.length;i++) {
       archives['/' + files[i]] = true;
-      console.log('created path to ' + files[i]);
+      //console.log('created path to ' + files[i]);
     }
   });
 };
