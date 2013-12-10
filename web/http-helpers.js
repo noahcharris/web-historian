@@ -1,3 +1,6 @@
+//I don't think I'm using this file in the way I should be, I think most of my functions should
+//be in here rather than in request-handler
+
 var path = require('path');
 var fs = require('fs');
 

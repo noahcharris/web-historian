@@ -1,7 +1,7 @@
 var path = require('path');
 var fs = require('fs');
-module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
 var helpers = require('./http-helpers.js');
+module.exports.datadir = path.join(__dirname, "../data/sites.txt");
 
 var homepage = function(req, res) {
   if (req.method === 'GET')
@@ -22,6 +22,7 @@ var homepage = function(req, res) {
   }
 }
 
+
 var sendStyles = function(req, res) {
   helpers.serveStaticAssets(res, 'public', 'styles.css', 'text/css');
 }
@@ -41,7 +42,7 @@ module.exports.handleRequest = function (req, res) {
   var method = router[req.url];
   if (method) {
     method(req, res);
-  } else if (archives[req.url]) {
+  } else if (archives[req.url]) {       //handler should read the sites directory to see if it has the site in question
     sendArchive(req, res);
   } else {
     res.writeHead(404, helpers.headers);
@@ -55,10 +56,10 @@ var router = {
   '/favicon.ico': sendIcon
 };
 
-var archives = {};
+var archives = {};        //THIS MUST CHANGE, the way i'm dealing with data right now is a quick fix...
 
 var fileString = fs.readFileSync('../data/sites.txt').toString();
-var temp = fileString.split(',');
+var temp = fileString.split('=');
 for (var i=0;i<temp.length;i++) {
   archives['/' + temp[i]] = true;
 }
