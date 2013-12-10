@@ -1,17 +1,17 @@
-var handler = require("../web/request-handler");
-handler.datadir = __dirname + "/testdata/sites.txt";
-var stubs = require("./helpers/stubs");
-var fs = require('fs');
-var res;
+// var handler = require("../web/request-handler");
+// handler.datadir = __dirname + "/testdata/sites.txt";
+// var stubs = require("./helpers/stubs");
+// var fs = require('fs');
+// var res;
 
-// allows us to run tests async
-function async(cb){
-  runs(cb);
-}
+// // allows us to run tests async
+// function async(cb){
+//   runs(cb);
+// }
 
-beforeEach(function(){
-  res = new stubs.Response();
-});
+// beforeEach(function(){
+//   res = new stubs.Response();
+// });
 
 // describe("Node Server Request Listener Function", function() {
 
@@ -52,14 +52,14 @@ beforeEach(function(){
     expect(res._ended).toEqual(true);
   });
 
-  it("Should 404 when asked for a nonexistent file", function(done) {
-    var req = new stubs.Request("/arglebargle", "GET");
-    handler.handleRequest(req, res);
-    async(function() {
-      expect(res._responseCode).toEqual(404);
-      expect(res._ended).toEqual(true);
-      done();
-    });
-  });
+  // it("Should 404 when asked for a nonexistent file", function(done) {
+  //   var req = new stubs.Request("/arglebargle", "GET");
+  //   handler.handleRequest(req, res);
+  //   async(function() {
+  //     expect(res._responseCode).toEqual(404);
+  //     expect(res._ended).toEqual(true);
+  //     done();
+  //   });
+  // });
 
-});
+// });

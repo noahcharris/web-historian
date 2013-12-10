@@ -21,5 +21,3 @@ exports.serveStaticAssets = function(res, folder, asset, type) {
     res.end(data);
   });
 };
-
-// As you go through, keep thinking about what helper functions you can put here!

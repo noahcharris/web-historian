@@ -1,4 +1,5 @@
 var path = require('path');
+var fs = require('fs');
 module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
 var helpers = require('./http-helpers.js');
 
@@ -6,9 +7,15 @@ var homepage = function(req, res) {
   if (req.method === 'GET')
     helpers.serveStaticAssets(res, 'public', 'index.html', 'text/html');
   if (req.method === 'POST') {
-    req.on('data', function(data) {
-      res.writeHead(200, helpers.headers);
-      res.end(data);
+    var data = '';
+    req.on('data', function(d) {
+      data += d;
+    });
+    req.on('end', function() {
+      fs.writeFile('../data/sites.txt', data, function(err) {
+        if (err) throw err;
+        console.log('Saved data to sites.txt!');
+      });
     });
   }
 }
@@ -46,6 +53,29 @@ var router = {
   '/favicon.ico': sendIcon
 };
 
-var archives = {
-  '/www.google.com': sendArchive //ok this is a little screwy, needs to change
+var archives = {};
+
+var fileString = fs.readFileSync('../data/sites.txt').toString();
+var temp = fileString.split(',');
+for (var i=0;i<temp.length;i++) {
+  archives['/' + temp[i]] = true;
 }
+
+
+
+// var archives = {
+//   '/www.google.com': sendArchive //ok this is a little screwy, needs to change
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
