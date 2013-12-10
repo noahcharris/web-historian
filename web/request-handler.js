@@ -15,6 +15,8 @@ var homepage = function(req, res) {
       fs.writeFile('../data/sites.txt', data, function(err) {
         if (err) throw err;
         console.log('Saved data to sites.txt!');
+        res.writeHead(302, helpers.headers);
+        res.end();
       });
     });
   }
