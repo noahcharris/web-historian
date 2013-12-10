@@ -16,8 +16,7 @@ var homepage = function(req, res) {
       fs.appendFile('../data/sites.txt', '\n' + parsedData, function(err) {   //could do some string manipulation here
         if (err) throw err;                                                   //right now the system can't handle backslashes anywhere in the url
         console.log('Saved data to sites.txt!');
-        res.writeHead(302, helpers.headers);
-        res.end();
+        helpers.serveStaticAssets(res, 'public', 'index.html', 'text/html');
       });
     });
   }
@@ -46,7 +45,7 @@ var sendArchive = function(req, res) {
 module.exports.handleRequest = function (req, res) {
   console.log("Serving " + req.method + " request at url " + req.url);
   var method = router[req.url];
-  updateArchives();                       //This function is async, so this is actually a bad place to put it
+  updateArchives();                       //This function is async, so this is actually a bad place to put it, takes a request to get things updated
   if (method) {
     method(req, res);
   } else if (archives[req.url]) {         //This system could be much more flexible, right now the url must be exactly right
