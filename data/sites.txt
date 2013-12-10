@@ -2,3 +2,7 @@ www.google.com
 www.reddit.com
 www.facebook.com
 america.aljazeera.com
+www.jquery.com
+www.jquery.com
+nodejs.org
+www.face.com

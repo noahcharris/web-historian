@@ -12,8 +12,9 @@ var homepage = function(req, res) {
       data += d;
     });
     req.on('end', function() {
-      fs.writeFile('../data/sites.txt', data, function(err) {
-        if (err) throw err;
+      var parsedData = data.split('=')[1];
+      fs.appendFile('../data/sites.txt', '\n' + parsedData, function(err) {   //could do some string manipulation here
+        if (err) throw err;                                                   //right now the system can't handle backslashes anywhere in the url
         console.log('Saved data to sites.txt!');
         res.writeHead(302, helpers.headers);
         res.end();
@@ -32,17 +33,23 @@ var sendIcon = function(req, res) {
 }
 
 var sendArchive = function(req, res) {
-  res.writeHead(200, helpers.headers);
-  res.end("www.google.com");
+  fs.readFile(__dirname + '/../data/sites' + req.url, function(err, data) {
+    if (err) throw err;
+    newheaders = helpers.headers;
+    newheaders['Content-type'] = "text/html";
+    res.writeHead(200, helpers.headers);
+    res.end(data);
+  });
 }
 
 
 module.exports.handleRequest = function (req, res) {
   console.log("Serving " + req.method + " request at url " + req.url);
   var method = router[req.url];
+  updateArchives();                       //This function is async, so this is actually a bad place to put it
   if (method) {
     method(req, res);
-  } else if (archives[req.url]) {       //handler should read the sites directory to see if it has the site in question
+  } else if (archives[req.url]) {         //This system could be much more flexible, right now the url must be exactly right
     sendArchive(req, res);
   } else {
     res.writeHead(404, helpers.headers);
@@ -56,21 +63,18 @@ var router = {
   '/favicon.ico': sendIcon
 };
 
-var archives = {};        //THIS MUST CHANGE, the way i'm dealing with data right now is a quick fix...
+var archives = {};  
 
-var fileString = fs.readFileSync('../data/sites.txt').toString();
-var temp = fileString.split('=');
-for (var i=0;i<temp.length;i++) {
-  archives['/' + temp[i]] = true;
-}
+function updateArchives() {
+  fs.readdir(__dirname + "/../data/sites", function(err, files) {
+    for (var i=0;i<files.length;i++) {
+      archives['/' + files[i]] = true;
+      console.log('created path to ' + files[i]);
+    }
+  });
+};
 
-
-
-// var archives = {
-//   '/www.google.com': sendArchive //ok this is a little screwy, needs to change
-// }
-
-
+updateArchives();
 
 
 
