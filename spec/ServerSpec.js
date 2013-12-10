@@ -38,19 +38,19 @@
   //   });
   // });
 
-  it("Should accept posts to /", function() {
-    fs.writeFileSync(handler.datadir, ""); // reset the test file
+  // it("Should accept posts to /", function() {
+  //   fs.writeFileSync(handler.datadir, ""); // reset the test file
 
-    var url = "www.example.com";
-    var req = new stubs.Request("/", "POST", {url: url});
+  //   var url = "www.example.com";
+  //   var req = new stubs.Request("/", "POST", {url: url});
 
-    handler.handleRequest(req, res);
+  //   handler.handleRequest(req, res);
 
-    var fileContents = fs.readFileSync(handler.datadir, 'utf8');
-    expect(res._responseCode).toEqual(302);
-    expect(fileContents).toEqual(url + "\n");
-    expect(res._ended).toEqual(true);
-  });
+  //   var fileContents = fs.readFileSync(handler.datadir, 'utf8');
+  //   expect(res._responseCode).toEqual(302);
+  //   expect(fileContents).toEqual(url + "\n");
+  //   expect(res._ended).toEqual(true);
+  // });
 
   // it("Should 404 when asked for a nonexistent file", function(done) {
   //   var req = new stubs.Request("/arglebargle", "GET");
